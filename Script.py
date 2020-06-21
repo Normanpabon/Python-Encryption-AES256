@@ -34,14 +34,14 @@ def PrintProgressBar(iteration, total, prefix = '', suffix = '', decimals = 1, l
 
 def ListAllFiles(): #part of progress bar
 
-
+    os.chdir('Input')
     InputRootFileCount = os.listdir()
 
     for file in InputRootFileCount:
         if os.path.isdir(file):
             InputRootFileCount.remove(file)
 
-
+    os.chdir(defaultPath)
     return len(InputRootFileCount)
     '''
     returnToFolder = os.getcwd()
@@ -72,13 +72,16 @@ def EncryptFile(TotalFiles):
     os.chdir('Input')
     filesInput = os.listdir()
     key = GenerateKey()
-    z = 0
+    totalf= int(TotalFiles)
+
     deleteFiles = int(input('\nWARNING: for security your old files will be deleted\n Do you want to continue ? \n 0. No  \n 1. Yes\n -- '))
 
     if  deleteFiles == 1:
+        z = 1
 
         for x in filesInput:
-            PrintProgressBar(iteration=z, total=TotalFiles, prefix = 'Encrypting:', suffix = 'Complete', length = 50)
+
+            PrintProgressBar(iteration=z, total=totalf, prefix = 'Encrypting:', suffix = 'Complete', length = 50)
 
 
 
@@ -96,6 +99,7 @@ def EncryptFile(TotalFiles):
 
             os.remove(x)
             z +=1
+
     else:
         exit()
 
@@ -112,12 +116,16 @@ def DecryptFile(TotalFiles):
     os.chdir('Input')
     filesInput = os.listdir()
     key = GenerateKey()
-    z=0
+    totalf= int(TotalFiles)
+
+    z=1
 
     for x in filesInput:
 
-        PrintProgressBar(iteration=z, total=TotalFiles, prefix = 'Decrypting:', suffix = 'Complete', length = 50)
 
+
+        PrintProgressBar(iteration=z, total=totalf, prefix = 'Decrypting:', suffix = 'Complete', length = 50)
+        z += 1
 
         with open(x, 'rb') as file:
             Fdata = file.read()
@@ -130,7 +138,7 @@ def DecryptFile(TotalFiles):
         with open(outPutFile, 'wb') as file:
             file.write(decrypted)
             file.close()
-        z =+1
+
         os.remove(x)
 
     decryptedFiles = os.listdir()
@@ -144,6 +152,7 @@ def DecryptFile(TotalFiles):
 def main():
 
     FileCount = int(ListAllFiles())
+
     createFolders()
     print('\nFile encryption with AES-256')
 
